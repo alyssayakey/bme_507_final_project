@@ -99,6 +99,7 @@ def plot_trace(trace, path):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    # print(trace.columns.tolist())
     fig, axes = plt.subplots(2, 1, figsize=(8, 6), sharex=True, layout="constrained")
     axes[0].plot(trace.time, trace.v)
     axes[0].set_ylabel("Voltage (mV)")

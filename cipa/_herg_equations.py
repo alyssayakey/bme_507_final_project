@@ -3,7 +3,16 @@ import numpy as np
 from numpy import exp, log, sqrt, power as pow
 from numba import njit
 
-PARAMETER_NAMES = ('A1', 'B1', 'q1', 'A2', 'B2', 'q2', 'A3', 'B3', 'q3', 'A4', 'B4', 'q4', 'A11', 'B11', 'q11', 'A21', 'B21', 'q21', 'A31', 'B31', 'q31', 'A41', 'B41', 'q41', 'A51', 'B51', 'q51', 'A52', 'B52', 'q52', 'A53', 'B53', 'q53', 'A61', 'B61', 'q61', 'A62', 'B62', 'q62', 'A63', 'B63', 'q63', 'Kmax', 'Ku', 'n', 'halfmax', 'Kt', 'Vhalf', 'T', 'timeout', 'starttime')
+PARAMETER_NAMES = ('A1', 'B1', 'q1', 'A2', 'B2', 'q2', 
+                   'A3', 'B3', 'q3', 'A4', 'B4', 'q4', 
+                   'A11', 'B11', 'q11', 'A21', 'B21', 
+                   'q21', 'A31', 'B31', 'q31', 'A41', 
+                   'B41', 'q41', 'A51', 'B51', 'q51', 
+                   'A52', 'B52', 'q52', 'A53', 'B53', 
+                   'q53', 'A61', 'B61', 'q61', 'A62', 
+                   'B62', 'q62', 'A63', 'B63', 'q63', 
+                   'Kmax', 'Ku', 'n', 'halfmax', 'Kt', 
+                   'Vhalf', 'T', 'timeout', 'starttime')
 
 @njit(cache=True, error_model="numpy")
 def evaluate(t, y, p):
