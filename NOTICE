@@ -1,0 +1,12 @@
+This directory contains a Python derivative of FDA/CiPA, originally authored
+by Kelly Chang and Zhihua Li. Upstream commit:
+539ff80d6616895de5d943e7bfb77b346d195db4
+https://github.com/FDA/CiPA
+
+Python conversion and modifications were made in this workspace in November
+2026. This derivative is not an official FDA release. See README.md for
+algorithm differences and validation limits.
+
+The ORd model includes work copyright (c) 2011-2015 Thomas O'Hara, Yoram Rudy,
+Washington University in St. Louis. Original license terms and disclaimers
+are in cipa/licenses/ and reference/CiPA/ and must accompany redistribution.
