@@ -54,6 +54,8 @@ def parser():
     a.add_argument("-x", "--dose", default="0")
     a.add_argument("--beats", type=int, default=1000)
     a.add_argument("--nsave", type=int, default=250)
+    a.add_argument("--trace-beats", type=int, default=0,
+                   help="Additionally save the final N consecutive beats as trace_cycles.csv/png [default 0]")
     a.add_argument("--cycle-length", type=float, default=2000)
     a.add_argument("--dt", type=float, default=1)
     a.add_argument("-c", "--cmaxfile", type=Path, default=DATA / "ap/CiPA_training_drugs.csv")
@@ -152,12 +154,15 @@ def main(argv=None):
                 for dose in doses:
                     metric, trace = simulate(args.drug, dose*cmax, sample, args.beats, args.nsave,
                         args.cycle_length, args.dt, args.hergpath, args.hillpath, drop,
-                        not args.no_opt_scaling, out / f"dose_{dose:g}")
+                        not args.no_opt_scaling, out / f"dose_{dose:g}", trace_beats=args.trace_beats)
                     row = dict(drug=args.drug, dose=dose, sample=sample, CL=args.cycle_length,
                                concentration=dose*cmax, **metric)
                     rows.append(row)
                     pd.DataFrame(rows).to_csv(out / "metrics.csv", index=False)
                     analysis.plot_trace(trace, out / f"dose_{dose:g}/trace.png")
+                    if args.trace_beats:
+                        cycles = pd.read_csv(out / f"dose_{dose:g}/trace_cycles.csv")
+                        analysis.plot_trace(cycles, out / f"dose_{dose:g}/trace_cycles.png")
                     print(json.dumps(row))
     elif command == "combine":
         print(analysis.combine(args.directory, args.nsamples))

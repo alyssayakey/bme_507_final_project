@@ -49,6 +49,25 @@ This creates `results/ap/fixed/control/metrics.csv` and, under `dose_0/`,
 .venv\Scripts\python.exe -m cipa ap
 ```
 
+To also save five consecutive final cycles, add `--trace-beats 5`:
+
+```powershell
+.venv\Scripts\python.exe -m cipa ap -d bepridil -x 1 --trace-beats 5
+```
+
+Each dose directory then also contains `trace_cycles.csv` and
+`trace_cycles.png`. With 1,000 beats, these contain beats 996–1000, while
+`trace.csv` and `trace.png` still contain the single beat selected by maximum
+repolarization dv. `--trace-beats` is independent of `--nsave`, which controls
+how many beats contribute metrics. The cycle CSV includes all the usual state
+and current columns, plus `beat`, `beat_time` (within each beat), and
+`simulation_time` (since the beginning of pacing). Its `time` column starts
+at zero at the first saved beat and increases continuously across the five
+cycles (0–10,000 ms at CL=2,000 ms). Shared boundary times appear only once;
+the new beat's initial sample is kept. qNet still resets at each beat.
+You must run at least as many beats as requested by `--trace-beats`.
+Existing simulations must be rerun to capture these additional trajectories.
+
 ## Drug fitting and uncertainty propagation
 
 For example, with bepridil:

@@ -46,3 +46,22 @@ def test_control_action_potential_and_qnet_integral():
     # Integral from output currents agrees with the extra ODE state.
     net = trace[["INaL", "ICaL", "Ito", "IKr", "IKs", "IK1"]].sum(axis=1)
     np.testing.assert_allclose(trapezoid(net, trace.time), metric["qNet"], rtol=.005)
+
+
+def test_save_five_consecutive_cycles_independent_of_metric_window(tmp_path):
+    import pandas as pd
+    from cipa.ap import simulate
+    metric, selected_trace = simulate(beats=6, nsave=1, trace_beats=5, output=tmp_path)
+    cycles = pd.read_csv(tmp_path / "trace_cycles.csv")
+    assert metric["beat"] == 6
+    assert sorted(cycles.beat.unique()) == [2, 3, 4, 5, 6]
+    assert cycles.time.iloc[0] == 0
+    assert cycles.time.iloc[-1] == 10000
+    assert (np.diff(cycles.time) > 0).all()
+    np.testing.assert_allclose(cycles.simulation_time, cycles.time+2000)
+    starts = cycles.groupby("beat", sort=True).first()
+    np.testing.assert_allclose(starts.beat_time, 0)
+    np.testing.assert_allclose(starts.qNet, 0)
+    last = cycles[cycles.beat == 6]
+    np.testing.assert_allclose(last.v, selected_trace.v, atol=1e-9)
+    assert len(pd.read_csv(tmp_path / "beat_metrics.csv")) == 1
