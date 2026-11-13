@@ -20,6 +20,7 @@ include = ["cipa*"]
 
 [tool.setuptools.package-data]
 cipa = ["data/**/*", "licenses/*"]
+cipa_beta = ["NOTICE", "README.md", "provenance.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

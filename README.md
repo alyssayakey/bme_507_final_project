@@ -1,5 +1,9 @@
 # CiPA in Python
 
+The combined CiPA + Gong beta-adrenergic model is available separately in
+[`cipa_beta/`](cipa_beta/README.md). Run it with `python -m cipa_beta ap`.
+The original `python -m cipa ap` remains the CiPA-only model.
+
 ## Active study: quinidine and no-drug control
 
 The command-line workflow now focuses on quinidine. Fitting commands default
@@ -20,13 +24,13 @@ Existing fitted inputs for other drugs cannot substitute for quinidine fits.
 Each dose directory includes `run_config.json`. Use distinct `--output` roots
 for experiments with different pacing or future stimulation conditions.
 
-The cell model now has a separate interface in `cipa/cell.py`; pacing supports
-additional signaling states and absolute experiment time. This prepares the
-integration of the Heijman 2011 beta-adrenergic model but does **not** implement
-beta-adrenergic stimulation yet. See
-[the integration notes](docs/beta_adrenergic_integration.md) for model sources,
-coupling decisions, and validation steps. Its canine substrate effects need
-an explicit mapping to the human ORd model.
+The cell model has a separate interface in `cipa/cell.py`; pacing supports
+additional signaling states and absolute experiment time. The `cipa` entry
+point remains CiPA-only. Beta-adrenergic regulation is implemented separately
+in [`cipa_beta`](cipa_beta/README.md), using the partner-supplied Gong 2020
+translation and retaining CiPA's human baseline and drug pharmacology.
+[The earlier integration notes](docs/beta_adrenergic_integration.md) document
+the original Heijman-based planning, before the Gong implementation was added.
 
 The original multi-drug TdP classifier remains in the library for provenance;
 the CLI disables classifier training because a quinidine-only study cannot

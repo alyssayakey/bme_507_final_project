@@ -1,0 +1,33 @@
+{
+  "extra_states": [
+    "hPf",
+    "hPs",
+    "jP",
+    "hBPf",
+    "hBPs",
+    "jBP",
+    "dP",
+    "fPf",
+    "fPs",
+    "fcaPf",
+    "fcaPs",
+    "fBPf",
+    "fcaBPf",
+    "xs1P",
+    "xs2P",
+    "JrelP",
+    "JrelBP"
+  ],
+  "signaling_states": 57,
+  "total_states": 124,
+  "sources": {
+    "cipa/_ord_equations.py": "c32f2d6b4acdae1ed6da34624f7d082b32c6de2867bc2661efd5d3f12c4a8ec6",
+    "beta-signaling/gong_beta.py": "b1fcf6ae331cc7fcbda6363955ef67c931889fd09c3fdf3ff55869e8cbbba839"
+  },
+  "modifications": [
+    "CiPA baseline parameters and Markov IKr preserved",
+    "Gong phosphorylation and PP1-CaMK coupling",
+    "Gong Cass ceiling excluded to preserve CiPA baseline",
+    "Effective mapping uses signaling-local indices"
+  ]
+}

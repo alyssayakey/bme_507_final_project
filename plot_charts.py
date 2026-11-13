@@ -91,6 +91,7 @@ def plot_currents(trace_path):
     axes3[0].plot(time[:2000], voltage[:2000])
     axes3[0].set_ylabel("Voltage (mV)")
     axes3[1].plot(time[:2000], dv[:2000])
+    # axes3[1].set_ylim((-2, 2))
     axes3[1].set(xlabel="Time (ms)", ylabel="dv/dt (mV/ms)")
 
     plt.tight_layout()
@@ -112,5 +113,7 @@ def plot_currents(trace_path):
 
 
 if __name__ == "__main__":
-    trace_path = "results\\ap\\fixed\\quinidine\\dose_4\\trace.csv"
+    # trace_path = "results\\ap\\fixed\\quinidine\\dose_4\\trace.csv"
+    # trace_path = "results\\ap\\fixed\\quinidine\\dose_4\\trace_cycles.csv"
+    trace_path = "results\\ap\\fixed\\control\\dose_0\\trace.csv"
     plot_currents(trace_path)

@@ -1,0 +1,17 @@
+Exploratory hybrid derivative of the FDA/CiPA Python port and the partner-
+supplied beta-signaling/gong_beta.py translation of Gong et al. (2020),
+J Mol Cell Cardiol 143:96-106, doi:10.1016/j.yjmcc.2020.04.009.
+Authors: Jingqi Q.X. Gong, Monica E. Susilo, Anna Sher, Cynthia J. Musante,
+Eric A. Sobie. Source reference: https://github.com/JQXGong/Ohara-beta-adrenergic
+Underlying signaling model includes Heijman et al. (2011).
+
+CiPA authors: Kelly Chang and Zhihua Li. ORd authors include Thomas O'Hara,
+Yoram Rudy, and Washington University in St. Louis. All original CiPA/ORd
+license notices in cipa/licenses/ accompany this derivative and retain their
+terms and disclaimers. No new license for the supplied Gong translation is
+asserted here; verify upstream licensing before redistribution.
+
+Modifications: human CiPA baseline/scaling/Markov IKr retained; Gong substrate
+regulation and signaling added; 17 extra electrical states; 57 signaling states;
+qNet and original CiPA output contract retained. See README.md and provenance.json.
+This is not an official author release or a validated regulatory model.
