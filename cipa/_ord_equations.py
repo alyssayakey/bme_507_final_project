@@ -1,7 +1,7 @@
 """Generated Python equations derived from FDA/CiPA; see licenses/."""
 import numpy as np
 from numpy import exp, log, sqrt, power as pow
-from numba import njit
+from .acceleration import njit
 
 PARAMETER_NAMES = ('celltype', 'GKrfc', 'GNaLfc', 'GNafc', 'GKsfc', 
                    'GK1fc', 'PCafc', 'Gtofc', 'A1', 'B1', 'q1', 'A2', 

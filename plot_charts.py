@@ -65,21 +65,21 @@ def plot_currents(trace_path):
 
 
     fig2, axes2 = plt.subplots(3, 1, figsize=(8, 6))
-    axes2[0].plot(time[:800], voltage[:800])
+    axes2[0].plot(time[:2000], voltage[:2000])
     axes2[0].set_ylabel("Voltage (mV)")
     axes2[0].set_title("Voltage Trace")
 
-    axes2[1].plot(time[:800], INaL[:800], label="INaL")
-    axes2[1].plot(time[:800], Ito[:800], label="Ito")
-    axes2[1].plot(time[:800], ICaL[:800], label="ICaL")
-    axes2[1].plot(time[:800], IKr[:800], label="IKr")
-    axes2[1].plot(time[:800], IKs[:800], label="IKs")
-    axes2[1].plot(time[:800], IK1[:800], label="IK1")
+    axes2[1].plot(time[:2000], INaL[:2000], label="INaL")
+    axes2[1].plot(time[:2000], Ito[:2000], label="Ito")
+    axes2[1].plot(time[:2000], ICaL[:2000], label="ICaL")
+    axes2[1].plot(time[:2000], IKr[:2000], label="IKr")
+    axes2[1].plot(time[:2000], IKs[:2000], label="IKs")
+    axes2[1].plot(time[:2000], IK1[:2000], label="IK1")
     axes2[1].set(xlabel="Time (ms)", ylabel="Ionic Current")
     axes2[1].legend(loc="right")
     axes2[1].set_title("Ionic Currents")
 
-    axes2[2].plot(time[:800], INa[:800], label="INa")
+    axes2[2].plot(time[:2000], INa[:2000], label="INa")
     axes2[2].set_title("INa")
     axes2[2].set_xlabel("Time (ms)")
     axes2[2].set_ylabel("Current (pA/pF)")
@@ -88,9 +88,9 @@ def plot_currents(trace_path):
     plt.show()
 
     fig3, axes3 = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
-    axes3[0].plot(time[:500], voltage[:500])
+    axes3[0].plot(time[:2000], voltage[:2000])
     axes3[0].set_ylabel("Voltage (mV)")
-    axes3[1].plot(time[:500], dv[:500])
+    axes3[1].plot(time[:2000], dv[:2000])
     axes3[1].set(xlabel="Time (ms)", ylabel="dv/dt (mV/ms)")
 
     plt.tight_layout()
@@ -112,5 +112,5 @@ def plot_currents(trace_path):
 
 
 if __name__ == "__main__":
-    trace_path = "results\\ap\\fixed\\control\\dose_0\\trace.csv"
+    trace_path = "results\\ap\\fixed\\quinidine\\dose_4\\trace.csv"
     plot_currents(trace_path)

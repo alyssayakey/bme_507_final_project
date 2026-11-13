@@ -1,5 +1,38 @@
 # CiPA in Python
 
+## Active study: quinidine and no-drug control
+
+The command-line workflow now focuses on quinidine. Fitting commands default
+to quinidine; `ap` defaults to quinidine at 1x Cmax (3237 nM). Request the
+no-drug comparison explicitly with `-d control`. Historical multi-drug data
+and results are retained, while CLI aggregation excludes other drugs.
+The active concentration table is `cipa/data/ap/quinidine.csv`.
+
+```powershell
+.venv\Scripts\python.exe -m cipa herg-fit
+.venv\Scripts\python.exe -m cipa hill-fit
+.venv\Scripts\python.exe -m cipa filter-li2017
+.venv\Scripts\python.exe -m cipa ap -x "1-4" --trace-beats 5
+.venv\Scripts\python.exe -m cipa ap -d control --trace-beats 5
+```
+
+Existing fitted inputs for other drugs cannot substitute for quinidine fits.
+Each dose directory includes `run_config.json`. Use distinct `--output` roots
+for experiments with different pacing or future stimulation conditions.
+
+The cell model now has a separate interface in `cipa/cell.py`; pacing supports
+additional signaling states and absolute experiment time. This prepares the
+integration of the Heijman 2011 beta-adrenergic model but does **not** implement
+beta-adrenergic stimulation yet. See
+[the integration notes](docs/beta_adrenergic_integration.md) for model sources,
+coupling decisions, and validation steps. Its canine substrate effects need
+an explicit mapping to the human ORd model.
+
+The original multi-drug TdP classifier remains in the library for provenance;
+the CLI disables classifier training because a quinidine-only study cannot
+train three risk classes. The conversion map below documents the historical
+port as well as the currently used features.
+
 Python conversion of [FDA/CiPA](https://github.com/FDA/CiPA), pinned to commit
 `539ff80d6616895de5d943e7bfb77b346d195db4`. The original checkout is in
 `reference/CiPA`; the working Python implementation is in `cipa/`.
@@ -29,7 +62,9 @@ py -3.12 -m venv .venv
 ```
 
 Numba compiles the Python equation functions on first use, which can take
-several seconds. Subsequent runs use its cache. Bundled input data and model
+several seconds. Subsequent runs use its cache. If native Numba loading is
+blocked, a warning announces a slower plain-Python equation fallback.
+Bundled input data and model
 defaults are resolved relative to the package, so commands work from other
 directories. Results are written relative to your current directory unless
 you specify an output path.
@@ -37,7 +72,7 @@ you specify an output path.
 ## Quick control simulation
 
 ```powershell
-.venv\Scripts\python.exe -m cipa ap --beats 2 --nsave 1
+.venv\Scripts\python.exe -m cipa ap -d control --beats 2 --nsave 1
 ```
 
 This creates `results/ap/fixed/control/metrics.csv` and, under `dose_0/`,
@@ -46,13 +81,13 @@ This creates `results/ap/fixed/control/metrics.csv` and, under `dose_0/`,
 1,000 beats and analyzes the last 250, which remain the defaults:
 
 ```powershell
-.venv\Scripts\python.exe -m cipa ap
+.venv\Scripts\python.exe -m cipa ap -d control
 ```
 
 To also save five consecutive final cycles, add `--trace-beats 5`:
 
 ```powershell
-.venv\Scripts\python.exe -m cipa ap -d bepridil -x 1 --trace-beats 5
+.venv\Scripts\python.exe -m cipa ap -d quinidine -x 1 --trace-beats 5
 ```
 
 Each dose directory then also contains `trace_cycles.csv` and
@@ -70,24 +105,24 @@ Existing simulations must be rerun to capture these additional trajectories.
 
 ## Drug fitting and uncertainty propagation
 
-For example, with bepridil:
+For example, with quinidine:
 
 ```powershell
 # hERG: resample whole cells within concentration strata, then fit.
-.venv\Scripts\python.exe -m cipa bootstrap -d bepridil -n 2000
-.venv\Scripts\python.exe -m cipa herg-fit -d bepridil
-.venv\Scripts\python.exe -m cipa herg-fit -d bepridil -i "1-2000"
-.venv\Scripts\python.exe -m cipa herg-summary -d bepridil
-.venv\Scripts\python.exe -m cipa herg-sensitivity -d bepridil
+.venv\Scripts\python.exe -m cipa bootstrap -d quinidine -n 2000
+.venv\Scripts\python.exe -m cipa herg-fit -d quinidine
+.venv\Scripts\python.exe -m cipa herg-fit -d quinidine -i "1-2000"
+.venv\Scripts\python.exe -m cipa herg-summary -d quinidine
+.venv\Scripts\python.exe -m cipa herg-sensitivity -d quinidine
 
 # Six non-hERG currents and the additional hERG Hill curve in the input data.
-.venv\Scripts\python.exe -m cipa hill-fit -d bepridil
-.venv\Scripts\python.exe -m cipa hill-summary -d bepridil
+.venv\Scripts\python.exe -m cipa hill-fit -d quinidine
+.venv\Scripts\python.exe -m cipa hill-summary -d quinidine
 .venv\Scripts\python.exe -m cipa filter-li2017
 
 # Fixed and sampled inputs, at 1 through 10 times therapeutic concentration.
-.venv\Scripts\python.exe -m cipa ap -d bepridil -x "1-10"
-.venv\Scripts\python.exe -m cipa ap -d bepridil -x "1-10" -i "1-2000"
+.venv\Scripts\python.exe -m cipa ap -d quinidine -x "1-10"
+.venv\Scripts\python.exe -m cipa ap -d quinidine -x "1-10" -i "1-2000"
 .venv\Scripts\python.exe -m cipa combine results/ap/fixed
 .venv\Scripts\python.exe -m cipa combine results/ap/uncertainty -n 2000
 .venv\Scripts\python.exe -m cipa qnet-ci
@@ -107,28 +142,20 @@ and Hill outputs are linked by row number, using sample 0 for optimal inputs
 and one-based sample indices for uncertainty inputs. Bootstrap `.npy` arrays
 internally use zero-based cell indices and have an accompanying experiments CSV.
 
-For new compounds, use `bootstrap/herg-fit --data PATH`,
+For alternative quinidine datasets, use `bootstrap/herg-fit --data PATH`,
 `hill-fit -f PATH`, and `ap --cmaxfile PATH --hergpath PATH --hillpath PATH`.
-If the compound has no Cmax entry, doses are interpreted as nM. The standard
-table is `cipa/data/ap/CiPA_training_drugs.csv`.
+Custom Cmax tables must contain a quinidine entry; otherwise doses are
+interpreted as nM. The active table is `cipa/data/ap/quinidine.csv`.
 
 To omit a drug effect, use `ap --dropcurrent ICaL` (or hERG, INaL, INa, IKs,
 Ito, IK1). `ap --omit` runs all seven omissions. Combine and analyze each
 `results/ap/fixed/drop_CURRENT` or `uncertainty/drop_CURRENT` directory
 separately. `--no-opt-scaling` disables the Dutta optimized scaling factors.
 
-After simulating the training drugs:
-
-```powershell
-.venv\Scripts\python.exe -m cipa tdp-error results/ap/fixed
-.venv\Scripts\python.exe -m cipa tdp-error results/ap/uncertainty
-```
-
-Classification uses the CiPA labels in the therapeutic-concentration table,
-requires all three categories in each training split, and excludes simulations
-whose selected beat has missing `max_dv`, following upstream. Output includes
-training and cross-validation mean absolute category errors, coefficients,
-and per-observation probabilities. Fits that fail to converge issue warnings.
+The historical classifier in `cipa.analysis.tdp_errors` requires multiple
+drugs and all three risk categories in each training split. It is retained
+for reference; `tdp-error` is disabled in the quinidine-only CLI. Within-drug
+comparisons should use AP duration, calcium, qNet, and afterdepolarization metrics.
 
 ## Python API
 

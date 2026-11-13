@@ -6,7 +6,7 @@ import pandas as pd
 from .common import DATA
 
 
-def combine(directory, nsamples=None):
+def combine(directory, nsamples=None, conditions=None):
     directory = Path(directory)
     files = sorted(p for p in directory.rglob("metrics.csv") if p != directory / "metrics.csv")
     # Avoid folding current-omission runs into the main analysis.
@@ -14,6 +14,10 @@ def combine(directory, nsamples=None):
     if not files:
         raise ValueError(f"No simulation metrics under {directory}")
     result = pd.concat([pd.read_csv(p) for p in files], ignore_index=True)
+    if conditions is not None:
+        result = result[result.drug.isin(conditions)]
+        if result.empty:
+            raise ValueError("No simulations found for the active study conditions")
     keys = ["drug", "dose", "sample"]
     if result.duplicated(keys).any():
         raise ValueError("Duplicate drug/dose/sample simulations")

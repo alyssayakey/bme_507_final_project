@@ -18,12 +18,12 @@ def plot_dose_comparison(trace_paths, dosages):
 
 if __name__ == "__main__":
     trace_paths = [
-        "results\\ap\\fixed\\control\\dose_0\\trace_cycles.csv",
-        "results\\ap\\fixed\\bepridil\\dose_1\\trace_cycles.csv",
-        "results\\ap\\fixed\\bepridil\\dose_2\\trace_cycles.csv",
-        "results\\ap\\fixed\\bepridil\\dose_3\\trace_cycles.csv",
-        "results\\ap\\fixed\\bepridil\\dose_4\\trace_cycles.csv"
+        "results\\ap\\fixed\\control\\dose_0\\trace.csv",
+        "results\\ap\\fixed\\quinidine\\dose_1\\trace.csv",
+        "results\\ap\\fixed\\quinidine\\dose_2\\trace.csv",
+        "results\\ap\\fixed\\quinidine\\dose_3\\trace.csv",
+        "results\\ap\\fixed\\quinidine\\dose_4\\trace.csv"
     ]
 
-    dosages = [0, 33, 66, 99, 132]
+    dosages = [0, 3237, 6474, 9711, 12948]
     plot_dose_comparison(trace_paths, dosages)

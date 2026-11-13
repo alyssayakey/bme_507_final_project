@@ -25,7 +25,7 @@ def translate(source, target, size, outputs):
     body = body.replace("exp(n*log(y[9]))", "y[9]**n")
     lines = ['"""Generated Python equations derived from FDA/CiPA; see licenses/."""',
              "import numpy as np", "from numpy import exp, log, sqrt, power as pow",
-             "from numba import njit", "", f"PARAMETER_NAMES = {tuple(p[0] for p in params)!r}",
+             "from .acceleration import njit", "", f"PARAMETER_NAMES = {tuple(p[0] for p in params)!r}",
              "", '@njit(cache=True, error_model="numpy")', "def evaluate(t, y, p):",
              f"    ydot = np.zeros({size})", f"    yout = np.zeros({outputs})"]
     lines += [f"    {name} = p[{idx}]" for name, idx in params]

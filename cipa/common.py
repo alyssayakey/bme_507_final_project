@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 DATA = Path(__file__).resolve().parent / "data"
-DRUGS = "dofetilide,cisapride,bepridil,verapamil,terfenadine,ranolazine,sotalol,mexiletine,quinidine,ondansetron,diltiazem,chlorpromazine"
+DRUGS = "quinidine"
 
 
 def read_pairs(path):

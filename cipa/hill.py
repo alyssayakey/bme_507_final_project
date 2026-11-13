@@ -149,8 +149,10 @@ def summarize(output, alpha=.05):
     return ci
 
 
-def filter_li2017(output="results/hill", table=DATA / "hill/Li2017_IC50.csv"):
+def filter_li2017(output="results/hill", table=DATA / "hill/Li2017_IC50.csv", drugs=None):
     for row in pd.read_csv(table).to_dict("records"):
+        if drugs is not None and row["drug"] not in drugs:
+            continue
         for filename in ("IC50_optimal.csv", "IC50_samples.csv"):
             path = Path(output) / row["drug"] / filename
             if not path.exists():

@@ -5,6 +5,7 @@ import json
 import numpy as np
 import pandas as pd
 from .common import DATA, DRUGS, parse_range, read_pairs
+from .study import DRUG, DRUG_TABLE, ALLOWED_CONDITIONS
 
 
 def parser():
@@ -17,7 +18,7 @@ def parser():
     b.add_argument("--data", type=Path, default=DATA / "herg")
     b.add_argument("--output", type=Path, default=Path("results/herg"))
     h = sub.add_parser("herg-fit", help="Fit hERG drug binding with CMA-ES")
-    h.add_argument("-d", "--drug", required=True)
+    h.add_argument("-d", "--drug", default=DRUG, choices=[DRUG])
     h.add_argument("-i", "--sample", default="0")
     h.add_argument("-s", "--seed", type=int, default=100)
     h.add_argument("-l", "--population", type=int, default=80)
@@ -35,7 +36,7 @@ def parser():
         if name == "herg-sensitivity":
             s.add_argument("--data", type=Path, default=DATA / "herg")
     h = sub.add_parser("hill-fit", help="Fit Hill dose-response curves and sample uncertainty")
-    h.add_argument("-d", "--drug", required=True)
+    h.add_argument("-d", "--drug", default=DRUG, choices=[DRUG])
     h.add_argument("-f", "--filepath", type=Path, default=DATA / "hill/drug_block.csv")
     h.add_argument("-n", "--nsamples", type=int, default=2000)
     h.add_argument("-b", "--burnin", type=int, default=10000)
@@ -49,16 +50,16 @@ def parser():
     s.add_argument("--output", type=Path, default=Path("results/hill"))
     s.add_argument("--table", type=Path, default=DATA / "hill/Li2017_IC50.csv")
     a = sub.add_parser("ap", help="Run action potentials with fixed or uncertainty inputs")
-    a.add_argument("-d", "--drug", default="control")
+    a.add_argument("-d", "--drug", default=DRUG, choices=ALLOWED_CONDITIONS)
     a.add_argument("-i", "--sample", default="0")
-    a.add_argument("-x", "--dose", default="0")
+    a.add_argument("-x", "--dose", default="1")
     a.add_argument("--beats", type=int, default=1000)
     a.add_argument("--nsave", type=int, default=250)
     a.add_argument("--trace-beats", type=int, default=0,
                    help="Additionally save the final N consecutive beats as trace_cycles.csv/png [default 0]")
     a.add_argument("--cycle-length", type=float, default=2000)
     a.add_argument("--dt", type=float, default=1)
-    a.add_argument("-c", "--cmaxfile", type=Path, default=DATA / "ap/CiPA_training_drugs.csv")
+    a.add_argument("-c", "--cmaxfile", type=Path, default=DRUG_TABLE)
     a.add_argument("-b", "--hergpath", type=Path, default=Path("results/herg"))
     a.add_argument("-m", "--hillpath", type=Path, default=Path("results/hill"))
     a.add_argument("-r", "--dropcurrent", choices=["hERG", "ICaL", "INaL", "INa", "IKs", "Ito", "IK1"])
@@ -82,6 +83,10 @@ def main(argv=None):
     args = p.parse_args(argv)
     from . import herg, hill, analysis
     command = args.command
+    if hasattr(args, "drug") and any(d not in ALLOWED_CONDITIONS for d in args.drug.replace(" ", "").split(",")):
+        p.error("The active study supports quinidine and no-drug control only")
+    if command != "ap" and hasattr(args, "drug") and args.drug != DRUG:
+        p.error("Fitting and summaries are restricted to quinidine")
     if command == "bootstrap":
         for index, drug in enumerate(args.drug.replace(" ", "").split(",")):
             data = pd.read_csv(args.data / f"{drug}.csv")
@@ -120,10 +125,11 @@ def main(argv=None):
         print(args.output / args.drug)
     elif command == "process-patchclamp":
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        hill.process_patchclamp(args.data).to_csv(args.output, index=False)
+        data = hill.process_patchclamp(args.data)
+        data[data.drug == DRUG].to_csv(args.output, index=False)
         print(args.output)
     elif command == "filter-li2017":
-        hill.filter_li2017(args.output, args.table)
+        hill.filter_li2017(args.output, args.table, drugs=[DRUG])
     elif command == "ap":
         from .ap import simulate
         doses = [0.] if args.drug == "control" else parse_range(args.dose)
@@ -165,17 +171,14 @@ def main(argv=None):
                         analysis.plot_trace(cycles, out / f"dose_{dose:g}/trace_cycles.png")
                     print(json.dumps(row))
     elif command == "combine":
-        print(analysis.combine(args.directory, args.nsamples))
+        print(analysis.combine(args.directory, args.nsamples, conditions=ALLOWED_CONDITIONS))
     elif command == "qnet-ci":
-        df = analysis.qnet_intervals(pd.read_csv(args.results / "fixed/metrics.csv"),
-                                    pd.read_csv(args.results / "uncertainty/metrics.csv"), args.alpha)
+        fixed = pd.read_csv(args.results / "fixed/metrics.csv")
+        uncertainty = pd.read_csv(args.results / "uncertainty/metrics.csv")
+        df = analysis.qnet_intervals(fixed[fixed.drug == DRUG], uncertainty[uncertainty.drug == DRUG], args.alpha)
         name = args.results / f"qNet_CI{100*(1-args.alpha):g}"
         df.to_csv(name.with_suffix(".csv"), index=False)
         analysis.plot_intervals(df, name.with_suffix(".png"))
         print(name)
     elif command == "tdp-error":
-        errors, predictions = analysis.tdp_errors(pd.read_csv(args.directory / "metrics.csv"), args.tdpfile)
-        for mode in ("training", "LOOCV"):
-            errors[errors["mode"] == mode].to_csv(args.directory / f"{mode}_errors.csv", index=False)
-            predictions[predictions["mode"] == mode].to_csv(args.directory / f"{mode}_probs.csv", index=False)
-        print(errors)
+        p.error("TdP category training requires multiple drugs/classes; it is unavailable in the quinidine-only study")
