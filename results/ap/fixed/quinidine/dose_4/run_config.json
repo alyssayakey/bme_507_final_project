@@ -1,0 +1,16 @@
+{
+  "model": "cipa-ord",
+  "drug": "quinidine",
+  "concentration_nM": 12948.0,
+  "sample": 0,
+  "beats": 1000,
+  "nsave": 250,
+  "trace_beats": 10,
+  "cycle_length_ms": 2000,
+  "dt_ms": 1,
+  "optimized": true,
+  "drop_current": null,
+  "beta_adrenergic_model": "not integrated",
+  "hergpath": "results\\herg",
+  "hillpath": "results\\hill"
+}

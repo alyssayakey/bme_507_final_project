@@ -1,0 +1,58 @@
+{
+  "ICaL": {
+    "acceptance_rate": 0.34,
+    "geweke_z": [
+      0.2436556510972562,
+      0.5529487309864242
+    ],
+    "convergence_passed": true
+  },
+  "IK1": {
+    "acceptance_rate": 0.065,
+    "geweke_z": [
+      -0.5201962713356779,
+      0.8536714050158044
+    ],
+    "convergence_passed": true
+  },
+  "IKs": {
+    "acceptance_rate": 0.34,
+    "geweke_z": [
+      0.42118160124757603,
+      -0.38403190788670755
+    ],
+    "convergence_passed": true
+  },
+  "INa": {
+    "acceptance_rate": 0.355,
+    "geweke_z": [
+      -0.19578423304284423,
+      0.22492039940697228
+    ],
+    "convergence_passed": true
+  },
+  "INaL": {
+    "acceptance_rate": 0.36,
+    "geweke_z": [
+      1.0647960867993576,
+      -0.46292376959638654
+    ],
+    "convergence_passed": true
+  },
+  "Ito": {
+    "acceptance_rate": 0.33,
+    "geweke_z": [
+      1.257010000290446,
+      -1.0407594529059414
+    ],
+    "convergence_passed": true
+  },
+  "hERG": {
+    "acceptance_rate": 0.275,
+    "geweke_z": [
+      -0.19430685304258158,
+      -0.029680963216433025
+    ],
+    "convergence_passed": true
+  }
+}

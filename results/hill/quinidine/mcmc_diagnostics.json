@@ -1,0 +1,58 @@
+{
+  "ICaL": {
+    "acceptance_rate": 0.25966666666666666,
+    "geweke_z": [
+      0.8075229881234894,
+      -0.9804468365965404
+    ],
+    "convergence_passed": true
+  },
+  "IK1": {
+    "acceptance_rate": 0.2485,
+    "geweke_z": [
+      1.1516597140395928,
+      -1.3226863663663373
+    ],
+    "convergence_passed": true
+  },
+  "IKs": {
+    "acceptance_rate": 0.31216666666666665,
+    "geweke_z": [
+      0.43943616359276544,
+      -1.6981378788038222
+    ],
+    "convergence_passed": true
+  },
+  "INa": {
+    "acceptance_rate": 0.21163333333333334,
+    "geweke_z": [
+      1.670201753443645,
+      -1.7970556268378552
+    ],
+    "convergence_passed": true
+  },
+  "INaL": {
+    "acceptance_rate": 0.3046333333333333,
+    "geweke_z": [
+      1.1120522878119503,
+      -1.4856507601064575
+    ],
+    "convergence_passed": true
+  },
+  "Ito": {
+    "acceptance_rate": 0.3312333333333333,
+    "geweke_z": [
+      1.2327121881552745,
+      -2.313049731146665
+    ],
+    "convergence_passed": false
+  },
+  "hERG": {
+    "acceptance_rate": 0.3367,
+    "geweke_z": [
+      2.2399817396625217,
+      -1.6801814571072624
+    ],
+    "convergence_passed": false
+  }
+}

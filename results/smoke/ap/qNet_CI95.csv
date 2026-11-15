@@ -1,0 +1,2 @@
+drug,dose,value,samples,conf,lower,upper
+quinidine,1.0,68.90298635813195,2,0.95,71.80616520356934,71.91581461928207

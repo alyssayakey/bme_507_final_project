@@ -1,0 +1,7 @@
+{
+  "objective": 77.0590360416029,
+  "evaluations": 14000,
+  "stop": {
+    "tolupsigma": "1e+20"
+  }
+}

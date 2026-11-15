@@ -1,0 +1,16 @@
+{
+  "model": "cipa-ord",
+  "drug": "control",
+  "concentration_nM": 0,
+  "sample": 0,
+  "beats": 2,
+  "nsave": 1,
+  "trace_beats": 0,
+  "cycle_length_ms": 2000,
+  "dt_ms": 1,
+  "optimized": true,
+  "drop_current": null,
+  "beta_adrenergic_model": "not integrated",
+  "hergpath": "results\\herg",
+  "hillpath": "results\\hill"
+}

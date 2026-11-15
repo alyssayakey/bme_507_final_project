@@ -1,0 +1,2 @@
+drug,dose,sample,concentration,iso_uM,regulation_enabled,CL,beat,qNet,dvdtmax,vmax,vrest,APD50,APD90,max_dv,camax,carest,CaTD50,CaTD90,EADs,noDepols,noRepols
+quinidine,1.0,0,3237.0,1.0,True,2000.0,5.0,-230.26448750297104,75.66425659308278,41.22257364735674,-88.44502919828867,340.0,729.0,1.7247731015564396,0.0009337780518479066,4.494840623710959e-05,103.0,716.0,2,0,1

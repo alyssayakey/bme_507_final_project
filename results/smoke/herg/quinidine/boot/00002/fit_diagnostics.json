@@ -1,0 +1,7 @@
+{
+  "objective": 7050.186160097466,
+  "evaluations": 6,
+  "stop": {
+    "maxiter": "1"
+  }
+}

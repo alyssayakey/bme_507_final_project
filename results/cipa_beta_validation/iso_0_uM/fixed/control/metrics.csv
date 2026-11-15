@@ -1,0 +1,2 @@
+drug,dose,sample,concentration,iso_uM,regulation_enabled,CL,beat,qNet,dvdtmax,vmax,vrest,APD50,APD90,max_dv,camax,carest,CaTD50,CaTD90,EADs,noDepols,noRepols
+control,0.0,0,0.0,0.0,True,2000.0,4.0,69.67060119190921,72.89767133189076,41.67287422503229,-88.01440141827914,238.0,290.0,-0.3775199480528462,0.00023905183844450946,7.452664202867791e-05,301.0,726.0,0,0,0
